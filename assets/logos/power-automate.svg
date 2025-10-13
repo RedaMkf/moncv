@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" role="img" aria-label="Microsoft Power Automate logo">
+  <defs>
+    <linearGradient id="pa" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0078d4"/>
+      <stop offset="1" stop-color="#00a4ef"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="80" fill="none"/>
+  <path d="M14 24c0-6 4.9-11 11-11h31l20 27-20 27H25c-6.1 0-11-5-11-11V24z" fill="url(#pa)"/>
+  <path d="M76 16h18l12 24-12 24H76l12-24L76 16z" fill="#50e6ff"/>
+</svg>
