@@ -38,7 +38,7 @@ body.menu-open {
 }
 
 .wrapper {
-    width: min(1160px, 88vw);
+    width: min(1400px, 94vw);
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -1167,8 +1167,8 @@ a:hover {
 
 .tech-sphere-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(2.4rem, 4vw, 3.4rem);
     justify-items: center;
 }
 
