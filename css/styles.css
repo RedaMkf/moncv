@@ -1167,8 +1167,8 @@ a:hover {
 
 .tech-sphere-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.8rem;
     justify-items: center;
 }
 
@@ -1179,10 +1179,10 @@ a:hover {
     --bubble-gradient: linear-gradient(140deg, rgba(56, 189, 248, 0.92), rgba(37, 99, 235, 0.78));
     --bubble-text: #0f172a;
     position: relative;
-    width: min(100%, 320px);
-    height: 320px;
+    width: min(100%, 360px);
+    height: 360px;
     border-radius: 50%;
-    padding: 2.5rem;
+    padding: 2.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1300,6 +1300,20 @@ a:hover {
     --sphere-primary: rgba(45, 212, 191, 0.5);
     --sphere-secondary: rgba(15, 118, 110, 0.26);
     --bubble-gradient: linear-gradient(145deg, rgba(45, 212, 191, 0.88), rgba(6, 182, 212, 0.68));
+}
+
+.tech-sphere--iot {
+    --sphere-primary: rgba(16, 185, 129, 0.5);
+    --sphere-secondary: rgba(45, 212, 191, 0.26);
+    --bubble-gradient: linear-gradient(145deg, rgba(16, 185, 129, 0.9), rgba(45, 212, 191, 0.72));
+    --bubble-text: #ecfdf5;
+}
+
+.tech-sphere--automation {
+    --sphere-primary: rgba(249, 115, 22, 0.5);
+    --sphere-secondary: rgba(251, 146, 60, 0.28);
+    --bubble-gradient: linear-gradient(145deg, rgba(249, 115, 22, 0.9), rgba(251, 146, 60, 0.72));
+    --bubble-text: #fff7ed;
 }
 
 .tech-sphere--crm {
@@ -1674,13 +1688,14 @@ footer .wrapper {
     }
 
     .tech-sphere-grid {
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 2.4rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2.6rem;
     }
 
     .tech-sphere {
-        width: min(88vw, 300px);
-        height: 300px;
+        width: min(88vw, 330px);
+        height: 330px;
+        padding: 2.6rem;
     }
 
     .timeline {
@@ -1741,9 +1756,9 @@ footer .wrapper {
     }
 
     .tech-sphere {
-        width: min(84vw, 270px);
-        height: 270px;
-        padding: 2.3rem;
+        width: min(84vw, 290px);
+        height: 290px;
+        padding: 2.4rem;
     }
 
     .tech-sphere__bubble::after {
@@ -1783,9 +1798,9 @@ footer .wrapper {
     }
 
     .tech-sphere {
-        width: min(92vw, 230px);
-        height: 230px;
-        padding: 1.9rem;
+        width: min(92vw, 250px);
+        height: 250px;
+        padding: 2.05rem;
     }
 
     .tech-sphere__bubble {
