@@ -1179,10 +1179,10 @@ a:hover {
     --bubble-gradient: linear-gradient(140deg, rgba(56, 189, 248, 0.92), rgba(37, 99, 235, 0.78));
     --bubble-text: #0f172a;
     position: relative;
-    width: min(100%, 360px);
-    height: 360px;
+    width: min(100%, 380px);
+    height: 380px;
     border-radius: 50%;
-    padding: 2.8rem;
+    padding: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1693,9 +1693,9 @@ footer .wrapper {
     }
 
     .tech-sphere {
-        width: min(88vw, 330px);
-        height: 330px;
-        padding: 2.6rem;
+        width: min(88vw, 350px);
+        height: 350px;
+        padding: 2.8rem;
     }
 
     .timeline {
@@ -1756,9 +1756,9 @@ footer .wrapper {
     }
 
     .tech-sphere {
-        width: min(84vw, 290px);
-        height: 290px;
-        padding: 2.4rem;
+        width: min(84vw, 300px);
+        height: 300px;
+        padding: 2.5rem;
     }
 
     .tech-sphere__bubble::after {
@@ -1798,9 +1798,9 @@ footer .wrapper {
     }
 
     .tech-sphere {
-        width: min(92vw, 250px);
-        height: 250px;
-        padding: 2.05rem;
+        width: min(92vw, 260px);
+        height: 260px;
+        padding: 2.15rem;
     }
 
     .tech-sphere__bubble {
