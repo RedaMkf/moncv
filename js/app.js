@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // CV Interactif Reda MOUKHFI
 // Animation IoT Network & Interactions
 // ============================================
@@ -692,13 +692,9 @@ if ('IntersectionObserver' in window) {
 }
 
 // ============================================
-// 24. MESSAGE DE BIENVENUE
-// ============================================
-setTimeout(() => {
-    showNotification('👋 Bienvenue sur mon CV interactif!', 'info');
-}, 1500);
 
 // ============================================
 // FIN DU SCRIPT
 // ============================================
 console.log('%c✅ Toutes les animations sont chargées et actives!', 'color: #10b981; font-weight: bold;');
+
