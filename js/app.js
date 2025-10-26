@@ -185,16 +185,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 4. PARALLAX EFFECT SUR LE HERO
+// 4. HERO MOTION (DÉSACTIVÉ POUR LISIBILITÉ)
 // ============================================
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-        hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
-    }
-});
+const hero = document.querySelector('.hero');
+if (hero) {
+    hero.style.transform = 'none';
+    hero.style.opacity = '1';
+}
 
 // ============================================
 // 5. ANIMATION DES CARTES AU SCROLL
