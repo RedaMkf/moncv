@@ -70,6 +70,14 @@ body.menu-open {
     border-radius: 999px;
 }
 
+.section-lead {
+    font-size: 1.05rem;
+    color: rgba(226, 232, 240, 0.85);
+    max-width: 640px;
+    line-height: 1.8;
+    margin: 0;
+}
+
 body::before {
     content: '';
     position: fixed;
@@ -398,6 +406,95 @@ a:hover {
     border-radius: 32px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.15);
+
+/* ===== Globe card styles ===== */
+.globe-card {
+    margin-top: 1.25rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: rgba(15,23,42,0.35);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
+}
+
+#global-globe {
+    width: 100%;
+    max-width: 920px;
+    /* match the demo: make the globe-stage sufficiently tall to avoid clipping */
+    height: clamp(520px, 72vh, 920px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+}
+
+/* Ensure the WebGL canvas centers inside the container (no visual nudge) */
+#global-globe canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.fallback-map {
+    display: none;
+}
+.fallback-map.active {
+    display: block;
+}
+
+.globe-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(5,10,20,0.9);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 150ms ease;
+    z-index: 9999;
+}
+
+/* Legend / filters */
+.globe-legend {
+    position: absolute;
+    right: 1.25rem;
+    top: 1.25rem;
+    background: rgba(8,12,22,0.6);
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    border: 1px solid rgba(148,163,184,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    z-index: 5;
+}
+.globe-legend form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+.globe-legend label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: rgba(226,232,240,0.9);
+}
+.globe-legend .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.06);
+}
     box-shadow: var(--shadow-xl);
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 64, 175, 0.6));
 }
@@ -418,6 +515,76 @@ a:hover {
     filter: blur(40px);
     animation: pulseGlow 8s ease-in-out infinite alternate;
 }
+
+/* ==========================
+   Globe - Projets internationaux
+   ========================== */
+.globe-card {
+    margin-top: 1.2rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid var(--border-glass);
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+#global-globe {
+    width: 100%;
+    height: 520px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.fallback-map {
+    display: none;
+    width: 100%;
+    height: 520px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.fallback-map.active { display: block; }
+
+.globe-controls {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+}
+
+.globe-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(2,6,23,0.9);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    color: var(--light);
+    font-size: 0.9rem;
+    z-index: 60;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity .12s ease;
+}
+
+.pulse-marker {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: relative;
+    border: 2px solid currentColor;
+    background: currentColor;
+    box-shadow: 0 0 12px currentColor;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 900px) {
+    #global-globe, .fallback-map { height: 380px; }
+}
+
 
 @keyframes pulseGlow {
     0% { transform: scale(0.85); opacity: 0.5; }
@@ -1875,5 +2042,202 @@ footer .wrapper {
     .wrapper {
         width: 100%;
     }
+}
+
+/* ===== globe demo styles (copied from globe/styles.css) ===== */
+.globe-stage {
+    position: relative;
+    flex: 1;
+    min-height: clamp(520px, 72vh, 920px);
+    background: rgba(8, 15, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+#globe-container,
+#fallback-map {
+    position: absolute;
+    inset: 0;
+}
+
+#globe {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#globe-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(6, 13, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #fff;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.1s ease;
+    white-space: nowrap;
+    z-index: 5;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+#fallback-map { display: none; }
+#fallback-map.active { display: block; }
+
+.fallback-message {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(5, 5, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1rem 1.3rem;
+    max-width: 320px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.pulse-marker {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    position: relative;
+    border: 2px solid currentColor;
+    background: currentColor;
+    box-shadow: 0 0 12px currentColor;
+    transform: translate(-50%, -50%);
+}
+
+.pulse-marker::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    opacity: 0.6;
+    animation: pulse 2.4s infinite ease-out;
+}
+
+@keyframes pulse {
+    from { transform: scale(0.6); opacity: 0.8; }
+    to { transform: scale(1.8); opacity: 0; }
+}
+
+@media (max-width: 720px) {
+    .panel { grid-template-columns: 1fr; }
+    .focus-controls { width: 100%; }
+    .legend ul { flex-direction: row; flex-wrap: wrap; gap: 0.8rem; }
+}
+
+/* End globe demo styles */
+
+/* ===== Section: Projets à l'international ===== */
+#projects-international .international-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+#projects-international .international-heading {
+    max-width: min(620px, 100%);
+}
+
+#projects-international .focus-controls {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+#projects-international .focus-controls .btn {
+    padding: 0.65rem 1.4rem;
+    font-size: 0.9rem;
+}
+
+#projects-international .international-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+#projects-international .international-card {
+    background: rgba(15, 23, 42, 0.65);
+    border-radius: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    padding: 1.6rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 20px 45px rgba(8, 15, 30, 0.4);
+    width: min(100%, 420px);
+}
+
+#projects-international .international-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-bottom: 1.25rem;
+}
+
+#projects-international .international-card__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    font-size: 0.7rem;
+    color: rgba(148, 163, 184, 0.7);
+}
+
+#projects-international .international-card__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--light);
+}
+
+#projects-international .legend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.8rem;
+    color: rgba(226, 232, 240, 0.85);
+    font-weight: 500;
+}
+
+#projects-international .legend-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+#projects-international .legend-list .dot {
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+}
+
+#projects-international .legend-hint {
+    margin-top: 1.25rem;
+    font-size: 0.95rem;
+    color: rgba(148, 163, 184, 0.85);
+}
+
+@media (max-width: 900px) {
+    #projects-international .international-header {
+        align-items: flex-start;
+    }
+
+    #projects-international .focus-controls {
+        width: 100%;
+    }
+}
+
+#projects-international .globe-stage {
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(148,163,184,0.06);
+    border-radius: 30px;
 }
 

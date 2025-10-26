@@ -24,6 +24,12 @@
     'Poclain Hydraulics': '#FF7A59'
   };
 
+  const CAMERA_TARGETS = {
+    europe: { lat: 28, lng: 5, altitude: 2.6 },
+    // world view: match the original demo so the planet appears the same
+    world: { lat: 0, lng: 0, altitude: 3.4 }
+  };
+
   const tooltip = createTooltip();
   let resumeRotateTimeout;
 
@@ -57,11 +63,23 @@
       .showAtmosphere(true)
       .atmosphereColor('#0d1c3d')
       .atmosphereAltitude(0.25)
+      // visual points
       .pointAltitude(() => 0.02)
       .pointRadius(() => 0.9)
       .pointColor(d => d.color)
-      .pointLabel(d => `${d.country} • ${d.company}`)
+      .pointLabel(d => `<strong>${d.country}</strong><br><small>${d.company}</small>`)
       .pointsData(dataset)
+      // HTML markers (pulse) so they remain visible and themeable
+      .htmlElementsData(dataset)
+      .htmlLat(d => d.lat)
+      .htmlLng(d => d.lon)
+      .htmlAltitude(() => 0.01)
+      .htmlElement(d => {
+        const marker = document.createElement('div');
+        marker.className = 'pulse-marker';
+        marker.style.color = d.color;
+        return marker;
+      })
       .ringsData([])
       .ringColor(d => d.color)
       .ringAltitude(() => 0.01)
@@ -77,7 +95,31 @@
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
 
-    globe.pointOfView({ lat: 28, lng: 5, altitude: 2.2 }, 0);
+    // Start with a world view so the globe is centered and visible
+    globe.pointOfView(CAMERA_TARGETS.world, 0);
+
+    // --- Filtering / legend support ---
+    // keep dataset and globe reference for filtering
+    let activeCompanies = new Set(Object.keys(COMPANY_COLORS));
+    function applyFilters() {
+      const filtered = dataset.filter(d => activeCompanies.has(d.company));
+      globe.pointsData(filtered);
+      globe.htmlElementsData(filtered);
+      if (countEl) countEl.textContent = new Set(filtered.map(p => p.country)).size;
+    }
+
+    // If a legend with checkboxes exists in the DOM, wire it to filters
+    const legendInputs = document.querySelectorAll('.globe-legend input[type="checkbox"][name="company"]');
+    if (legendInputs && legendInputs.length) {
+      // initialize from checkboxes state
+      legendInputs.forEach(cb => { if (!cb.checked) activeCompanies.delete(cb.value); });
+      legendInputs.forEach(cb => cb.addEventListener('change', () => {
+        if (cb.checked) activeCompanies.add(cb.value); else activeCompanies.delete(cb.value);
+        applyFilters();
+      }));
+      // apply initial filter set
+      applyFilters();
+    }
 
     controls.addEventListener('start', () => {
       controls.autoRotate = false;

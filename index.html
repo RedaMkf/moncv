@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Leaflet CSS for fallback 2D map in globe section -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
     <canvas id="iot-network"></canvas>
@@ -387,6 +389,52 @@
                         </div>
                     </article>
                 </div>
+            </div>
+        </section>
+
+        </section>
+
+        <!-- Projets internationaux: globe interactif (copié depuis demo) -->
+        <section id="projects-international" class="section fade-in">
+            <div class="wrapper">
+                <div class="international-header">
+                    <div class="international-heading">
+                        <h2>Projets à l'international</h2>
+                        <p class="section-lead">Réalisations emblématiques pour Alstef, Forvia et Poclain Hydraulics avec pilotage global des programmes innovation & industrialisation.</p>
+                    </div>
+                    <div class="focus-controls" aria-label="Changer la zone de focus du globe">
+                        <button class="btn btn-ghost" data-focus="europe">Focus Europe</button>
+                        <button class="btn btn-outline" data-focus="world">Focus Monde</button>
+                    </div>
+                </div>
+
+                <div class="international-panel">
+                    <article class="international-card legend">
+                        <div class="international-card__header">
+                            <span class="international-card__kicker">Repères</span>
+                            <h3 class="international-card__title">Légende</h3>
+                        </div>
+                        <ul class="legend-list">
+                            <li><span class="dot" style="background:#00D1B2"></span><span>Alstef — Intralogistique & bagages</span></li>
+                            <li><span class="dot" style="background:#4C7EFF"></span><span>Forvia — Programmes automobile</span></li>
+                            <li><span class="dot" style="background:#FF7A59"></span><span>Poclain Hydraulics — Innovation fluide</span></li>
+                        </ul>
+                        <p class="legend-hint">Astuce&nbsp;: faites pivoter le globe ou zoomez pour explorer les projets.</p>
+                    </article>
+                </div>
+
+                <main class="globe-stage">
+                    <div id="globe-container">
+                        <div id="globe"></div>
+                        <div id="globe-tooltip" role="tooltip"></div>
+                    </div>
+                    <div id="fallback-map" aria-live="polite">
+                        <div class="fallback-message">
+                            <h3>Affichage 2D activé</h3>
+                            <p>Votre navigateur ne supporte pas WebGL. Voici une carte statique des projets.</p>
+                        </div>
+                    </div>
+                </main>
             </div>
         </section>
 
@@ -787,6 +835,236 @@
             <p class="footer-subtitle">Ingénieur Industrie 4.0 · Chef de projet digital · Passionné d'innovation</p>
         </div>
     </footer>
+
+    <!-- Globe dependencies and globe initializer (Projets internationaux) -->
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Inline demo script copied from globe/projects-globe.html to reproduce exact behavior -->
+    <script>
+        const PROJECTS = [
+            { country: "New Zealand", lat: -41.0, lon: 174.0, company: "Alstef" },
+            { country: "Australia", lat: -25.27, lon: 133.77, company: "Alstef" },
+            { country: "Mexico", lat: 23.6345, lon: -102.5528, company: "Alstef" },
+            { country: "Switzerland", lat: 46.8182, lon: 8.2275, company: "Alstef" },
+            { country: "Croatia", lat: 45.1, lon: 15.2, company: "Alstef" },
+            { country: "France", lat: 46.2276, lon: 2.2137, company: "Alstef" },
+            { country: "China", lat: 35.8617, lon: 104.1954, company: "Forvia" },
+            { country: "Germany", lat: 51.1657, lon: 10.4515, company: "Forvia" },
+            { country: "Italy", lat: 41.8719, lon: 12.5674, company: "Poclain Hydraulics" },
+            { country: "Slovenia", lat: 46.1512, lon: 14.9955, company: "Poclain Hydraulics" }
+        ];
+
+        const COMPANY_COLORS = {
+            Alstef: '#00D1B2',
+            Forvia: '#4C7EFF',
+            'Poclain Hydraulics': '#FF7A59'
+        };
+
+        // Camera targets: increase altitude to ensure the globe is fully visible
+        const CAMERA_TARGETS = {
+            // Europe-focused view (closer to enlarge the planet a bit)
+            europe: { lat: 28, lng: 5, altitude: 2.6 },
+            // World view — zoomed in compared to previous value so the globe appears larger
+            world: { lat: 0, lng: 0, altitude: 3.4 }
+        };
+
+        const state = {
+            activeCompanies: new Set(Object.keys(COMPANY_COLORS)),
+            globe: null,
+            resumeRotateTimeout: null,
+            tooltipVisible: false,
+            lastMouse: { x: 0, y: 0 }
+        };
+
+        const GlobeFactory = window.Globe;
+
+        const elements = {
+            globeContainer: document.getElementById('globe-container'),
+            globeEl: document.getElementById('globe'),
+            fallbackEl: document.getElementById('fallback-map'),
+            tooltip: document.getElementById('globe-tooltip'),
+            countryCount: document.getElementById('country-count'),
+            checkboxes: Array.from(document.querySelectorAll('#filters input[type="checkbox"]')),
+            resetBtn: document.getElementById('reset-filters'),
+            focusButtons: Array.from(document.querySelectorAll('.focus-controls .btn'))
+        };
+
+        document.addEventListener('pointermove', event => {
+            state.lastMouse = { x: event.clientX, y: event.clientY };
+            if (state.tooltipVisible) positionTooltip();
+        });
+
+        if (GlobeFactory && supportsWebGL()) {
+            initGlobe();
+        } else {
+            initFallbackMap();
+        }
+
+        function supportsWebGL() {
+            try {
+                const canvas = document.createElement('canvas');
+                return !!window.WebGLRenderingContext && (!!canvas.getContext('webgl') || !!canvas.getContext('experimental-webgl'));
+            } catch (err) {
+                return false;
+            }
+        }
+
+        function initGlobe() {
+            const dataset = PROJECTS.map(project => ({ ...project, color: COMPANY_COLORS[project.company] }));
+            const globe = GlobeFactory({ rendererConfig: { alpha: true, antialias: true } })(elements.globeEl)
+                .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+                .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+                .backgroundColor('rgba(0,0,0,0)')
+                .showAtmosphere(true)
+                .atmosphereColor('#0d1c3d')
+                .atmosphereAltitude(0.25)
+                .pointAltitude(() => 0.02)
+                .pointRadius(() => 0.9)
+                .pointColor(d => d.color)
+                .pointLabel(d => `<strong>${d.country}</strong><br><small>${d.company}</small>`)
+                .pointsData(dataset)
+                .htmlElementsData(dataset)
+                .htmlLat(d => d.lat)
+                .htmlLng(d => d.lon)
+                .htmlAltitude(() => 0.01)
+                .htmlElement(d => {
+                    const marker = document.createElement('div');
+                    marker.className = 'pulse-marker';
+                    marker.style.color = d.color;
+                    return marker;
+                })
+                .ringsData([])
+                .ringColor(d => d.color)
+                .ringAltitude(() => 0.01)
+                .ringMaxRadius(() => 3)
+                .ringPropagationSpeed(() => 2)
+                .ringRepeatPeriod(() => 1200);
+
+            state.globe = globe;
+            globe.renderer().setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+            // Start with a world view so the globe is centered and fully visible
+            globe.pointOfView(CAMERA_TARGETS.world, 0);
+            const controls = globe.controls();
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.35;
+
+            controls.addEventListener('start', () => {
+                controls.autoRotate = false;
+                clearTimeout(state.resumeRotateTimeout);
+            });
+
+            controls.addEventListener('end', () => {
+                clearTimeout(state.resumeRotateTimeout);
+                state.resumeRotateTimeout = setTimeout(() => {
+                    controls.autoRotate = true;
+                }, 1400);
+            });
+
+            globe.onPointHover(handlePointHover);
+            applyFilters();
+            wireInteractions();
+            window.addEventListener('resize', () => controls.update());
+        }
+
+        function handlePointHover(point) {
+            if (!state.globe) return;
+            state.globe.ringsData(point ? [point] : []);
+
+            if (point) {
+                elements.tooltip.innerHTML = `${point.country} • ${point.company}`;
+                state.tooltipVisible = true;
+                elements.tooltip.style.opacity = 1;
+                positionTooltip();
+            } else {
+                state.tooltipVisible = false;
+                elements.tooltip.style.opacity = 0;
+            }
+        }
+
+        function positionTooltip() {
+            elements.tooltip.style.left = `${state.lastMouse.x + 14}px`;
+            elements.tooltip.style.top = `${state.lastMouse.y + 18}px`;
+        }
+
+        function applyFilters() {
+            const filtered = PROJECTS.filter(project => state.activeCompanies.has(project.company));
+            const mapped = filtered.map(project => ({ ...project, color: COMPANY_COLORS[project.company] }));
+
+            if (state.globe) {
+                state.globe.pointsData(mapped);
+                state.globe.htmlElementsData(mapped);
+            }
+
+            const uniqueCountries = new Set(filtered.map(project => project.country));
+            if (elements.countryCount) {
+                elements.countryCount.textContent = uniqueCountries.size;
+            }
+        }
+
+        function wireInteractions() {
+            if (elements.checkboxes.length) {
+                elements.checkboxes.forEach(input => {
+                    input.addEventListener('change', () => {
+                        const active = elements.checkboxes.filter(cb => cb.checked).map(cb => cb.value);
+                        if (!active.length) {
+                            input.checked = true;
+                            return;
+                        }
+                        state.activeCompanies = new Set(active);
+                        applyFilters();
+                    });
+                });
+            }
+
+            if (elements.resetBtn) {
+                elements.resetBtn.addEventListener('click', () => {
+                    elements.checkboxes.forEach(cb => { cb.checked = true; });
+                    state.activeCompanies = new Set(Object.keys(COMPANY_COLORS));
+                    applyFilters();
+                });
+            }
+
+            elements.focusButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (!state.globe) return;
+                    const target = CAMERA_TARGETS[btn.dataset.focus];
+                    state.globe.pointOfView(target, 1200);
+                });
+            });
+        }
+
+        function initFallbackMap() {
+            elements.globeContainer.style.display = 'none';
+            elements.fallbackEl.classList.add('active');
+
+            if (!window.L) return;
+
+            const map = L.map('fallback-map', {
+                zoomControl: false,
+                scrollWheelZoom: false,
+                dragging: true
+            }).setView([25, 10], 2);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 5,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            PROJECTS.forEach(project => {
+                L.circleMarker([project.lat, project.lon], {
+                    radius: 6,
+                    color: COMPANY_COLORS[project.company],
+                    fillColor: COMPANY_COLORS[project.company],
+                    fillOpacity: 0.9,
+                    weight: 2
+                }).addTo(map).bindPopup(`<strong>${project.country}</strong><br>${project.company}`);
+            });
+        }
+    </script>
 
     <script src="js/app.js"></script>
 </body>
