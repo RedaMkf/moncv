@@ -78,6 +78,12 @@ body.menu-open {
     margin: 0;
 }
 
+.section-lead--nowrap {
+    white-space: nowrap;
+    max-width: 100%;
+    display: block;
+}
+
 body::before {
     content: '';
     position: fixed;
@@ -1337,6 +1343,11 @@ a:hover {
     color: rgba(148, 163, 184, 0.88);
     font-size: 1.05rem;
     line-height: 1.75;
+}
+
+.tech-intro--nowrap {
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .tech-sphere-grid {
