@@ -1153,6 +1153,13 @@ a:hover {
     margin-top: 0.8rem;
 }
 
+.cert-actions .btn {
+    white-space: nowrap;
+    font-size: 0.88rem;
+    padding: 0.75rem 1.2rem;
+    letter-spacing: 0.03em;
+}
+
 /* ============================================
    TECH KNOWLEDGE
    ============================================ */
@@ -1314,6 +1321,13 @@ a:hover {
     --sphere-secondary: rgba(251, 146, 60, 0.28);
     --bubble-gradient: linear-gradient(145deg, rgba(249, 115, 22, 0.9), rgba(251, 146, 60, 0.72));
     --bubble-text: #fff7ed;
+}
+
+.tech-sphere--dev {
+    --sphere-primary: rgba(99, 102, 241, 0.5);
+    --sphere-secondary: rgba(139, 92, 246, 0.28);
+    --bubble-gradient: linear-gradient(145deg, rgba(79, 70, 229, 0.92), rgba(14, 165, 233, 0.7));
+    --bubble-text: #eef2ff;
 }
 
 .tech-sphere--crm {
