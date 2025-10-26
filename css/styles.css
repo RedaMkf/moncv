@@ -2160,45 +2160,32 @@ footer .wrapper {
     font-size: 0.9rem;
 }
 
-#projects-international .international-panel {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-bottom: 2rem;
-}
-
-#projects-international .international-card {
-    background: rgba(15, 23, 42, 0.65);
-    border-radius: 22px;
+#projects-international .globe-legend {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: min(320px, 34vw);
+    padding: 1.1rem 1.3rem;
+    border-radius: 20px;
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.92), rgba(8, 11, 22, 0.82));
     border: 1px solid rgba(148, 163, 184, 0.25);
-    padding: 1.6rem;
-    backdrop-filter: blur(14px);
-    box-shadow: 0 20px 45px rgba(8, 15, 30, 0.4);
-    width: min(100%, 420px);
-}
-
-#projects-international .international-card__header {
+    backdrop-filter: blur(12px);
+    box-shadow: 0 16px 40px rgba(5, 8, 20, 0.45);
+    z-index: 4;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    margin-bottom: 1.25rem;
+    gap: 1rem;
 }
 
-#projects-international .international-card__kicker {
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    font-size: 0.7rem;
-    color: rgba(148, 163, 184, 0.7);
-}
-
-#projects-international .international-card__title {
+#projects-international .globe-legend__title {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--light);
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.85);
 }
 
-#projects-international .legend-list {
+#projects-international .globe-legend__list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -2208,18 +2195,18 @@ footer .wrapper {
     font-weight: 500;
 }
 
-#projects-international .legend-list li {
+#projects-international .globe-legend__list li {
     display: flex;
     align-items: center;
     gap: 0.85rem;
 }
 
-#projects-international .legend-list .dot {
+#projects-international .globe-legend__list .dot {
     flex-shrink: 0;
     border: 2px solid rgba(255, 255, 255, 0.12);
 }
 
-#projects-international .legend-hint {
+#projects-international .globe-legend__hint {
     margin-top: 1.25rem;
     font-size: 0.95rem;
     color: rgba(148, 163, 184, 0.85);
@@ -2232,6 +2219,22 @@ footer .wrapper {
 
     #projects-international .focus-controls {
         width: 100%;
+    }
+
+    #projects-international .globe-legend {
+        width: calc(100% - 2rem);
+        right: 1rem;
+        left: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    #projects-international .globe-legend {
+        top: auto;
+        bottom: 1rem;
+        width: calc(100% - 1.5rem);
+        left: 0.75rem;
+        right: 0.75rem;
     }
 }
 
