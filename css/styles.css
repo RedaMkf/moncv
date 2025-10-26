@@ -47,7 +47,7 @@ body.menu-open {
 .section {
     position: relative;
     z-index: 1;
-    padding: 6rem 0;
+    padding: 4rem 0;
 }
 
 .section h2 {
@@ -284,7 +284,7 @@ a:hover {
     min-height: calc(100vh - 72px);
     display: flex;
     align-items: center;
-    padding: 6rem 0 5rem;
+    padding: 4.25rem 0 3.5rem;
     overflow: hidden;
 }
 
