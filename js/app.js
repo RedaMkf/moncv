@@ -118,6 +118,30 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================
+// 1.b LANG SWITCHER
+// ============================================
+(function initLanguageSwitcher() {
+    const buttons = Array.from(document.querySelectorAll('.language-option'));
+    if (!buttons.length) return;
+
+    const currentLang = (document.documentElement.getAttribute('lang') || 'fr').toLowerCase();
+
+    buttons.forEach(button => {
+        const targetLang = (button.dataset.lang || '').toLowerCase();
+        if (!targetLang) return;
+
+        button.classList.toggle('is-active', targetLang === currentLang);
+
+        button.addEventListener('click', () => {
+            if (targetLang === currentLang) return;
+            const destination = targetLang === 'en' ? 'index-en.html' : 'index.html';
+            const hash = window.location.hash;
+            window.location.href = destination + (hash || '');
+        });
+    });
+})();
+
+// ============================================
 // 2. SCROLL ANIMATIONS
 // ============================================
 const observerOptions = {
