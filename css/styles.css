@@ -1384,16 +1384,6 @@ a:hover {
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
 }
 
-.cert-logo--xl {
-    width: 110px;
-    height: 110px;
-    padding: 0.5rem;
-}
-
-.cert-logo--xl img {
-    transform: scale(1.05);
-}
-
 .cert-logo img {
     width: 100%;
     height: 100%;
@@ -1403,17 +1393,20 @@ a:hover {
 .cert-body {
     display: grid;
     gap: 0.45rem;
+    min-width: 0;
 }
 
 .cert-body h3 {
     font-size: 1.15rem;
     font-weight: 700;
     color: #fff;
+    overflow-wrap: anywhere;
 }
 
 .cert-body p {
     font-size: 0.9rem;
     color: rgba(148, 163, 184, 0.85);
+    overflow-wrap: anywhere;
 }
 
 .cert-number {
@@ -1435,6 +1428,13 @@ a:hover {
     font-size: 0.88rem;
     padding: 0.75rem 1.2rem;
     letter-spacing: 0.03em;
+}
+
+@media (max-width: 520px) {
+    .cert-actions .btn {
+        font-size: 0.82rem;
+        padding: 0.65rem 1rem;
+    }
 }
 
 /* ============================================
